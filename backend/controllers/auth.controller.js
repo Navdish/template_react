@@ -1,12 +1,14 @@
+const { httpStatusCode } = require('../libs/constants');
 const {authService} = require('../service');
 
 exports.createUser = async (req, res)=>{
     try {
       const user = await authService.create({data : req?.body})
       res.status(201).json({message : "user added successfully"})
+      return handleSuccess(res,user,httpStatusCode.CREATED)
     }
     catch (error) {
-      res.status(error?.code).json({message : error?.message});
+      return handleError(res,error)
     }
 }
 
@@ -16,6 +18,6 @@ exports.loginUser = async (req, res)=>{
       res.status(200).json({user, message: "user loggedin successfully"});
     }
     catch(error) {
-      res.status(error?.code).json({message : error?.message});
+      return handleError(res,error)
     }
 }

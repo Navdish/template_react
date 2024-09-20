@@ -1,4 +1,4 @@
-const CustomError = require('../lib/error');
+const CustomError = require('../libs/error');
 const {userService} = require('../service');
 
 exports.modifiedUser = async(req, res)=> {

@@ -1,6 +1,5 @@
 import Box from "@mui/system/Box";
-import FormField from "../../components/FormField";
-import { useForm } from "react-hook-form";
+import { useForm, useFormState } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormData, UserSchema } from "./types";
 import { Button, IconButton, Paper, Snackbar, Stack, Typography } from "@mui/material";
@@ -9,26 +8,24 @@ import { createUser } from "../../features/auth/auth.action";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
+import TextField from "../../components/form/textfield";
+import { ROLE_TYPES } from "./role-type";
+import Select from "../../components/form/select";
 
 export default function Signup() {
   const [open, setOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({
+  const { control, handleSubmit, reset, setValue, resetField } = useForm<FormData>({
     resolver: zodResolver(UserSchema),
   });
+  const { errors } = useFormState({ control });
 
   const onSubmit = async (data: FormData) => {
     dispatch(createUser(data)).then((response) => {
       if(!response.payload) {
-        // add snackbar showing wrong credentials
         setOpen(true);
-
         // navigate("/Login");
     }
       if (response.payload) navigate("/Login");
@@ -81,51 +78,90 @@ export default function Signup() {
               justifyContent: "center",
             }}
           >
+            <Typography variant="h5">
+              Demo Test
+            </Typography>
           </Box>
           <Stack
             width={"100%"}
             alignItems={"flex-start"}
             justifyContent={"center"}
+            gap={"20px"}
           >
-            <Typography sx={{ fontSize: "20px", fontWeight: "bold", mb: 4 }}>
-              Create your Free Account
+            <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
+              Create your Account
             </Typography>
 
-            <FormField
+            <TextField<FormData>
               type="text"
-              placeholder="Name"
+              label="name"
               name="name"
-              register={register}
-              error={errors.name}
+              helperText={
+                errors?.name
+                  ? errors?.name?.message
+                  : undefined
+              }
+              error={errors?.name}
+              control={control}
+              maxLength={50}
             />
 
-            <FormField
+            <TextField<FormData>
               type="text"
-              placeholder="Email"
+              label="Email"
               name="email"
-              register={register}
-              error={errors.email}
+              helperText={
+                errors?.email
+                  ? errors?.email?.message
+                  : undefined
+              }
+              error={errors?.email}
+              control={control}
+              maxLength={50}
             />
 
-            <FormField
-              type="password"
-              placeholder="Password"
+            <TextField<FormData>
+              type="text"
+              label="Password"
               name="password"
-              register={register}
-              error={errors.password}
+              helperText={
+                errors?.password
+                  ? errors?.password?.message
+                  : undefined
+              }
+              error={errors?.password}
+              control={control}
+              maxLength={50}
             />
 
-            <FormField
-              type="password"
-              placeholder="Confirm Password"
+            <TextField<FormData>
+              type="text"
+              label="Confirm Password"
               name="confirmPassword"
-              register={register}
-              error={errors.confirmPassword}
+              helperText={
+                errors?.confirmPassword
+                  ? errors?.confirmPassword?.message
+                  : undefined
+              }
+              error={errors?.confirmPassword}
+              control={control}
+              maxLength={50}
             />
             {/* <button type="submit" className="submit-button">
                     Submit
                 </button> */}
-            <select
+            <Select<FormData>
+              name="role"
+              placeholder="Role"
+              options={ROLE_TYPES}
+              control={control}
+              helperText={
+                errors?.role
+                  ? errors?.role?.message
+                  : undefined
+              }
+            />
+            {/* <select
               {...register("role")}
               style={{
                 margin: "10px",
@@ -136,7 +172,7 @@ export default function Signup() {
               <option value="USER">USER</option>
               <option value="VENDOR">VENDOR</option>
               <option value="ADMIN">ADMIN</option>
-            </select>
+            </select> */}
             <Button
               color="primary"
               variant="contained"
@@ -145,7 +181,7 @@ export default function Signup() {
                 textTransform: "none",
                 borderRadius: "10px",
                 fontSize: "16px",
-                width: "90%",
+                width: "100%",
                 fontWeight: "500",
                 boxShadow: "none",
                 mb: 4,
@@ -153,7 +189,7 @@ export default function Signup() {
             >
               Create Account
             </Button>
-            <Box> Already a user ?? <Link to={'/login'}> Log in </Link></Box>
+            <Typography> Already a user ?? <Link to={'/login'}> Log in </Link></Typography>
           </Stack>
         </Paper>
       </form>

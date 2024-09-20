@@ -5,13 +5,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import * as React from 'react';
-import { RootState } from '../../app/store';
 import { useAppDispatch } from '../../app/hooks'
 import { useForm } from "react-hook-form";
-import { LoginSchema, LoginFormData } from './types';
-import FormField from '../../components/FormField';
+import { LoginSchema } from './types';
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../features/auth/auth.action";
+import TextField from "../../components/form/textfield";
 
 function Login() {
 
@@ -37,7 +36,7 @@ function Login() {
     );
 
     const {
-        register,
+        control,
         handleSubmit,
         formState: { errors },
     } = useForm<loginProps>({
@@ -101,21 +100,33 @@ function Login() {
                         </Typography>
 
 
-                        <FormField
+                        <TextField<loginProps>
                             type="text"
-                            placeholder="Email"
+                            label="Email"
                             name="email"
-                            register={register}
-                            error={errors.email}
+                            helperText={
+                                errors?.email
+                                ? errors?.email?.message
+                                : undefined
+                            }
+                            error={errors?.email}
+                            control={control}
+                            maxLength={50}
                         />
 
-                        <FormField
-                            type="password"
-                            placeholder="Password"
+                        <TextField<loginProps>
+                            type="text"
+                            label="Password"
                             name="password"
-                            register={register}
-                            error={errors.password}
-                        />
+                            helperText={
+                                errors?.password
+                                ? errors?.password?.message
+                                : undefined
+                            }
+                            error={errors?.password}
+                            control={control}
+                            maxLength={50}
+                            />
 
                         <Button
                             color="primary"

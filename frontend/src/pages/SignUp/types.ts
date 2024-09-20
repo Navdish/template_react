@@ -1,6 +1,4 @@
-import { z, ZodType } from "zod"; // Add new import
-
-import { FieldError, UseFormRegister } from "react-hook-form";
+import { z } from "zod"; 
 
 export type FormData = {
     email: string;

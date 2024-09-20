@@ -1,4 +1,4 @@
-const CustomError = require('../lib/error');
+const CustomError = require('../libs/error');
 const {Post, Comment, Reaction} = require('../models');
 
 exports.addPost = async({userId, files, data})=>{

@@ -2,7 +2,7 @@ const { User } = require('../models')
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
-const CustomError = require('../lib/error');
+const CustomError = require('../libs/error');
 
 exports.create = async({data})=> {
     const {email, password} = data;

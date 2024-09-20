@@ -1,19 +1,26 @@
-const express = require('express');
-const cors = require('cors');
 require("dotenv").config();
-const multer = require('multer');
-const http = require('http')
-
+global.argv = process.argv.slice(2);
+global.port = global.argv[0] || process.env.APP_PORT;
+if (!global.port) {
+  console.log("port is not defined. argv = ", global.argv);
+  process.exit(128);
+}
+const express = require("express");
+const cors = require("cors");
 const app = express();
+
+app.use(express.json({ limit: "50mb", extended: true }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cors());
-app.use(express.json());
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static('uploads')) 
+app.use('/', require('./routes'));
+process.on("uncaughtException", (err) => {
+  console.log("uncaught exception", err);
+});
 
-// app.use(express.json);
+app.listen(global.port, () => {
+  const NODE_ENV= process.env.NODE_ENV;
+  console.log(`${NODE_ENV} Server is listening on port ${global.port}`);
+});
 
-require('./config/mongoDB');
-app.use("/", require("./routes"));
-
-app.listen(process.env.PORT, function () {
-    console.log(`server running at ${process.env.PORT}`);
-})
+module.exports = app;

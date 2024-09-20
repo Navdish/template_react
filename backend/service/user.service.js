@@ -1,4 +1,4 @@
-const CustomError = require('../lib/error');
+const CustomError = require('../libs/error');
 const {User} = require('../models');
 
 

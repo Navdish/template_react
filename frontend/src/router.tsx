@@ -58,7 +58,10 @@ const routes: RouteObject[] = [
             {
 
             path: '',
-            element: <Protected><SidebarLayout /></Protected>,
+            element: 
+                // <Protected>
+                    <SidebarLayout />,
+                // </Protected>,
             children: [
                 {
                     path: '',
